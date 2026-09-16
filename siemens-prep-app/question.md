@@ -42,7 +42,7 @@ Há ~20 problemas espalhados pelo projeto (bugs, más práticas, violações de 
 - [X] Angular: form reativo sem `Validators`
 - [X] Angular: interceptor não trata 401
 - [X] Docker: imagem backend não é multi-stage
-- [ ] Docker Compose: segredo em texto plano
+- [X] Docker Compose: segredo em texto plano
 - [ ] K8s: sem readiness/liveness probe
 - [ ] K8s: password em ConfigMap em vez de Secret
 - [ ] CI/CD: sem cache de dependências
