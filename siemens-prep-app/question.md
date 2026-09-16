@@ -38,10 +38,10 @@ Há ~20 problemas espalhados pelo projeto (bugs, más práticas, violações de 
 - [X] Angular: subscribe sem `ngOnDestroy` (memory leak)
 - [X] Angular: subscribe sem tratamento de erro
 - [X] Angular: `*ngFor` sem `trackBy`
-- [ ] Angular: `snapshot.paramMap` em vez de observar mudanças de rota
-- [ ] Angular: form reativo sem `Validators`
-- [ ] Angular: interceptor não trata 401
-- [ ] Docker: imagem backend não é multi-stage
+- [X] Angular: `snapshot.paramMap` em vez de observar mudanças de rota
+- [X] Angular: form reativo sem `Validators`
+- [X] Angular: interceptor não trata 401
+- [X] Docker: imagem backend não é multi-stage
 - [ ] Docker Compose: segredo em texto plano
 - [ ] K8s: sem readiness/liveness probe
 - [ ] K8s: password em ConfigMap em vez de Secret

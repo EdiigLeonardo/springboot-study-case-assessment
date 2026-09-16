@@ -1,0 +1,11 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: { name: hr-sync-hpa }
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: hr-sync-backend }
+  minReplicas: 2
+  maxReplicas: 20
+  metrics: [{ type: Resource, resource: { name: cpu, target: { type: Utilization, averageUtilization: 60 } } }]
+# BUG (AKS): o node pool do AKS tem tamanho FIXO (cluster autoscaler
+# desligado). O HPA "manda" escalar ate 20 pods, mas sem capacidade de nodes
+# a crescer, os pods extra ficam presos em Pending indefinidamente.

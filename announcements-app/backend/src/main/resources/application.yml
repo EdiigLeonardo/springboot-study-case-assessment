@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:announcements}
+    username: ${DB_USER:announcements}
+    password: ${DB_PASSWORD:announcements}
+  jpa:
+    hibernate:
+      ddl-auto: update   # BUG: Flyway TAMBEM gerencia o schema (ver db/migration) - os dois a mexer no schema entram em conflito/drift.
+  flyway:
+    locations: classpath:db/migration

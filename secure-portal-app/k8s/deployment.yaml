@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: portal-backend }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: portal-backend } }
+  template:
+    metadata: { labels: { app: portal-backend } }
+    spec:
+      # BUG: sem automountServiceAccountToken: false - o token da
+      # ServiceAccount default fica montado no pod mesmo sem a app precisar
+      # de falar com a API do Kubernetes (aumenta a superficie de ataque).
+      containers:
+        - name: backend
+          image: portal-backend:1.0.0
+          ports: [{ containerPort: 8080 }]
+          env:
+            # BUG: segredo passado como variavel de ambiente - visivel em
+            # "kubectl describe pod", em /proc/<pid>/environ, e herdado por
+            # qualquer processo filho. Um volume montado a partir do Secret
+            # e mais dificil de expor por engano.
+            - { name: DB_PASSWORD, valueFrom: { secretKeyRef: { name: portal-secret, key: password } } }
+# BUG: nao existe nenhum NetworkPolicy - qualquer pod no cluster (incluindo
+# um comprometido, de outra app) pode chegar a este backend e ao Postgres.

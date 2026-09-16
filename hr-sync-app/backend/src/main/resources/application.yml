@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    # BUG (Azure): a ligar a um Azure Database for PostgreSQL sem sslmode=require -> trafego nao cifrado.
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:hrsync}
+    username: ${DB_USER:hrsync}
+    password: ${DB_PASSWORD:hrsync}
+  jpa: { hibernate: { ddl-auto: validate } }
+  flyway: { locations: classpath:db/migration }
+
+hr:
+  # BUG (Azure): connection string com chave de acesso escrita diretamente
+  # aqui, versionada no git - devia vir do Azure Key Vault / Managed Identity.
+  external-api-key: "AccountKey=super-secret-key-abc123"
+  external-url: https://hr-legacy.example.com
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      hrClient:
+        sliding-window-size: 3   # BUG: janela demasiado pequena -> circuito abre/fecha de forma instavel com pouco trafego.
+  retry:
+    instances:
+      hrClient:
+        max-attempts: 5
+        wait-duration: 100ms   # BUG: sem randomizacao/backoff exponencial -> 5 tentativas quase instantaneas (thundering herd) num servico ja em dificuldades.
+  timelimiter:
+    instances:
+      hrClient:
+        timeout-duration: 2s   # BUG: o RestTemplate/WebClient usado no HrClient nao tem timeout proprio configurado (default = infinito) -> este timeout nunca chega a interromper a chamada real.

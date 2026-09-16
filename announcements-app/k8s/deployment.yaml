@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: announcements-backend }
+spec:
+  replicas: 3
+  strategy: { rollingUpdate: { maxUnavailable: 0 } }
+  # BUG: 3 replicas, cada uma corre o Flyway no arranque (comportamento
+  # default do spring-boot-starter). No deploy, os 3 pods novos arrancam
+  # em simultaneo e competem para aplicar a MESMA migration -> lock
+  # contention no Flyway, ou pior, condicao de corrida sem lock decente.
+  # BUG: nao ha initContainer/Job separado so para migrations - se a
+  # migration falhar, o pod da APP inteira falha a arrancar (dificil
+  # distinguir "app com bug" de "migration com bug" nos logs).
+  # BUG: rollout com maxUnavailable:0 mantem pods ANTIGOS a servir tráfego
+  # ao mesmo tempo que os NOVOS aplicam uma migration que renomeia uma
+  # coluna (V3) - os pods antigos (codigo velho) partem a meio do deploy.
+  selector: { matchLabels: { app: announcements-backend } }
+  template:
+    metadata: { labels: { app: announcements-backend } }
+    spec:
+      containers:
+        - name: backend
+          image: announcements-backend:1.0.0
+          ports: [{ containerPort: 8080 }]

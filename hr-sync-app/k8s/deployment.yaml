@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: hr-sync-backend }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: hr-sync-backend } }
+  template:
+    metadata: { labels: { app: hr-sync-backend } }
+    spec:
+      # BUG (AKS/ACR): imagePullSecrets com credencial estatica em vez de
+      # usar a integracao nativa "az aks update --attach-acr" (managed
+      # identity) - a credencial expira/roda e os pulls comecam a falhar
+      # sem ninguem ter mudado nada no cluster.
+      imagePullSecrets: [{ name: acr-static-credential }]
+      containers:
+        - name: backend
+          image: myregistry.azurecr.io/hr-sync-backend:1.0.0
+          ports: [{ containerPort: 8080 }]
+          env:
+            # BUG (Azure Key Vault): segredo do Azure metido diretamente num
+            # Secret do Kubernetes em vez do CSI Secret Store driver ligado
+            # ao Key Vault - nao ha rotacao central nem auditoria de acesso.
+            - { name: HR_API_KEY, valueFrom: { secretKeyRef: { name: hr-sync-secret, key: apiKey } } }
