@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+/* INTENTIONAL BUG: global selector reaches into Material internals and is brittle across versions. */
+.mat-mdc-form-field { width: 600px !important; display:block; }
+/* INTENTIONAL BUG: fixed width causes bad mobile layout. */
+nav { margin-bottom: 24px; }
