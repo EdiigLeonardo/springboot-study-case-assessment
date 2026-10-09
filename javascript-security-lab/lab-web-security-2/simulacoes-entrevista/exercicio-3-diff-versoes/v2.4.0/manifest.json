@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sessions",
+  "version": "2.4.0",
+  "description": "Guarda e restaura grupos de separadores. Agora com sincronização e sugestões.",
+  "permissions": ["tabs", "storage", "cookies", "webNavigation", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "bg.js" },
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    { "matches": ["<all_urls>"], "js": ["sugestoes.js"], "run_at": "document_end", "all_frames": true }
+  ],
+  "externally_connectable": { "matches": ["https://*.tabsessions-sync.com/*"] }
+}

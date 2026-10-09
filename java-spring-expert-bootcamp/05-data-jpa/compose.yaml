@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: bootcamp
+      POSTGRES_USER: bootcamp
+      POSTGRES_PASSWORD: bootcamp
+    ports: ["5432:5432"]

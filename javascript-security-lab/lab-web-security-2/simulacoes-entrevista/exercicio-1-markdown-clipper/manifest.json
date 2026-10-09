@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Markdown Clipper",
+  "version": "1.4.2",
+  "description": "Copia qualquer seleção da página como Markdown.",
+  "permissions": ["tabs", "storage", "clipboardWrite", "scripting"],
+  "host_permissions": ["*://*/*"],
+  "background": { "service_worker": "sw.js" },
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    { "matches": ["*://*/*"], "js": ["clipper.js"], "all_frames": true }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["overlay.html", "icons/*"], "matches": ["*://*/*"] }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Notas Rápidas (versão insegura - LAB)",
+  "version": "1.0.0",
+  "description": "Extensao de treino. Contem MAS falhas de seguranca propositadas. Nao publicar.",
+  "permissions": ["tabs", "cookies", "storage", "scripting", "webRequest"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "externally_connectable": { "matches": ["*://*/*"] },
+  "web_accessible_resources": [
+    { "resources": ["*"], "matches": ["<all_urls>"] }
+  ]
+}

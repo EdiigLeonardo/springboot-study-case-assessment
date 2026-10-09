@@ -1,0 +1,13 @@
+spring:
+  application.name: classic-web
+  mvc.view:
+    prefix: /WEB-INF/jsp/
+    suffix: .jsp
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/mastery}
+    username: ${DB_USER:mastery}
+    password: ${DB_PASSWORD:mastery}
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate
+management.endpoints.web.exposure.include: health,info,metrics,prometheus

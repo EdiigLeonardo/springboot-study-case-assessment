@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sessions",
+  "version": "2.3.0",
+  "description": "Guarda e restaura grupos de separadores.",
+  "permissions": ["tabs", "storage"],
+  "background": { "service_worker": "bg.js" },
+  "action": { "default_popup": "popup.html" }
+}
